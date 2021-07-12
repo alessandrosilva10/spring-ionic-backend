@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS phone;
+
+CREATE TABLE phone (
+	id BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
+    phone VARCHAR(50) NOT NULL,
+	client_id BIGINT(20) NOT NULL,
+	FOREIGN KEY (client_id) REFERENCES client(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO phone (phone, client_id) values ('18-33216114', 1);
