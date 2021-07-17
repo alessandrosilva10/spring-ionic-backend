@@ -1,26 +1,40 @@
 package br.com.alessandro.alga.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import br.com.alessandro.alga.service.validation.ClientInsertAnnotation;
 
 @Entity
 @Table(name = "client")
-public class Client {
+public class Client implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -29,22 +43,39 @@ public class Client {
 	private String name;
 	
 	@NotNull
+	@Email
 	private String email;
 	
-	@NotNull
+	//@Pattern(regexp = "([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})")
 	private String cpfOrCnpj;
 	
-	@NotNull
 	private Integer type;
 	
-	@JsonBackReference
-	@OneToMany(mappedBy="client")
+	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL,
+			orphanRemoval = true)
 	private List<Address> addresses = new ArrayList<>(); // one client has many addresses
 	
 	@ElementCollection
 	@CollectionTable(name = "phone")
 	private Set<String> phone = new HashSet<>();
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "client")
+	private List<Order> orders;
+	
+	public Client() {
 
+	}
+
+	public Client(Long id, String name, String email, String cpfOrCnpj, ClientEnum type) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.cpfOrCnpj = cpfOrCnpj;
+		this.type = (type==null) ? null : type.getCode();
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -116,5 +147,13 @@ public class Client {
 			return false;
 		Client other = (Client) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	public List<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
 	}
 }

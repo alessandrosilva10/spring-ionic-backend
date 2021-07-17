@@ -1,14 +1,20 @@
 package br.com.alessandro.alga.model;
 
 import java.util.Objects;
+import java.util.Optional;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "address")
@@ -23,12 +29,31 @@ public class Address {
 	private String district;
 	private String cep;
 	
-	@ManyToOne
-	@JoinColumn(name = "client_id")
-	private Client client;
+	
+	public Address() {
+		
+	}
+	public Address(Long id, String public_place, String number, String complement, String district, String cep,
+			Client client, City city) {
+		super();
+		this.id = id;
+		this.public_place = public_place;
+		this.number = number;
+		this.complement = complement;
+		this.district = district;
+		this.cep = cep;
+		this.client = client;
+		this.city = city;
+	}
+
 	
 	@ManyToOne
-	@JoinColumn(name = "city_id")
+	@JoinColumn(name = "client_id")
+    @JsonIgnore
+	private Client client;
+
+	@ManyToOne
+	@JoinColumn(name = "city_id", nullable = false)
 	private City city;
 	
 	public Long getId() {

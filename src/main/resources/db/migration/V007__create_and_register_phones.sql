@@ -7,4 +7,4 @@ CREATE TABLE phone (
 	FOREIGN KEY (client_id) REFERENCES client(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO phone (phone, client_id) values ('18-33216114', 1);
+INSERT INTO phone (phone, client_id) values ('18-16114', 1);
