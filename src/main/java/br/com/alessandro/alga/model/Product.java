@@ -1,7 +1,9 @@
 package br.com.alessandro.alga.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -14,11 +16,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "product")
@@ -34,13 +37,28 @@ public class Product {
 	@NotNull
 	private BigDecimal price;
 
-	@JsonManagedReference //@JsonManagedReference é colocado na parte da referência que quer avançar na serialização. Ou seja, a parte que é serializada normalmente.
+	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY ,cascade = {CascadeType.ALL})
     @JoinTable(name = "product_category",
         joinColumns = @JoinColumn(name = "product_id"),
         inverseJoinColumns = @JoinColumn(name = "category_id")
     )
 	private Set<Category> category = new HashSet<Category>();
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "id.product")
+	private Set<OrderItem> items = new HashSet<>();
+	
+	@JsonIgnore
+	public List<Order> getOrders(){
+		List<Order> list = new ArrayList<>();
+		
+		for(OrderItem x : items) {
+			list.add(x.getOrder());
+		}
+
+		return list;
+	}
 	
 	public Set<Category> getCategory() {
 		return category;
@@ -89,5 +107,13 @@ public class Product {
 			return false;
 		Product other = (Product) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	public Set<OrderItem> getItems() {
+		return items;
+	}
+
+	public void setItems(Set<OrderItem> items) {
+		this.items = items;
 	}
 }

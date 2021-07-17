@@ -1,5 +1,6 @@
 package br.com.alessandro.alga.model;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -13,27 +14,36 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "category")
-public class Category {
-	
+public class Category implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@NotNull
-	@Size(min = 3, max = 20)
+	@Size(min=3, max=20)
+	@Pattern(regexp="^[A-Za-z]*$")
 	private String name;
 	
-
-	//@JsonBackReference é colocado na parte da referência que não quer na serialização. Ou seja, a parte que será omitida.
-	@JsonBackReference
 	@ManyToMany(mappedBy="category", fetch = FetchType.LAZY ,cascade = {CascadeType.ALL})
 	private Set<Product> product = new HashSet<Product>();
+	
+	public Category() {
+	}
+	
+	public Category(Long id, String name) {
+		super();
+		 this.id = id;
+		 this.name = name;
+	}
 	
 	public Long getId() {
 		return id;

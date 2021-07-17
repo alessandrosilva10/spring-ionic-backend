@@ -13,4 +13,4 @@ CREATE TABLE address (
 	FOREIGN KEY (client_id) REFERENCES client(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO address (cep, complement, district, number, public_place, city_id, client_id) values ('19802112', 'Fundos', 'Vila Brasileira', "1296", "Cruz e Souza", 1, 1);
+INSERT INTO address (cep, complement, district, number, public_place, city_id, client_id) values ('12802112', 'Vila S', 'Vila S', "196", "Souza", 1, 1);

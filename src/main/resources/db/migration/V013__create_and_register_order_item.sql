@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS `order_item`;
+
+CREATE TABLE `order_item` (
+	id BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
+	discount DECIMAL(6,2) NOT NULL,
+	price DECIMAL(6,2) NOT NULL,
+	quantity BIGINT(20) NOT NULL,
+	order_id BIGINT(20) NOT NULL,
+	product_id BIGINT(20) NOT NULL,
+	FOREIGN KEY (order_id) REFERENCES orderr(id),
+	FOREIGN KEY (product_id) REFERENCES product(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
