@@ -7,9 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-import br.com.alessandro.alga.service.validation.ClientInsertAnnotation;
-
-@ClientInsertAnnotation
+//@ClientInsertAnnotation
 public class ClientNewDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 

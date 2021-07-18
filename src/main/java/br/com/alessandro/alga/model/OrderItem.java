@@ -1,6 +1,8 @@
 package br.com.alessandro.alga.model;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Objects;
 
 import javax.persistence.EmbeddedId;
@@ -18,13 +20,40 @@ public class OrderItem {
 	private Integer quantity;
 	private BigDecimal price;
 	
+	public OrderItem() {
+		
+	}
+	
+	public OrderItem(Order order, Product product, OrderItemPK id, BigDecimal discount, Integer quantity, BigDecimal price) {
+		super();
+		this.id = id;
+		this.discount = discount;
+		this.quantity = quantity;
+		this.price = price;
+		id.setOrder(order);
+		id.setProduct(product);
+	}
+
+	
+	public BigDecimal getSubTotal() {
+		return (price.subtract(discount)).multiply(BigDecimal.valueOf(quantity));
+	}
+
 	@JsonIgnore
 	public Order getOrder() {
 		return id.getOrder();
 	}
 	
+	public void setOrder(Order order) {
+		id.setOrder(order);
+	}
+	
 	public Product getProduct() {
 		return id.getProduct();
+	}
+	
+	public void setProduct(Product product) {
+		id.setProduct(product);
 	}
 	
 	public OrderItemPK getId() {
@@ -73,5 +102,20 @@ public class OrderItem {
 			return false;
 		OrderItem other = (OrderItem) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	@Override
+	public String toString() {
+		NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+		StringBuilder builder = new StringBuilder();
+		builder.append(getProduct().getName());
+		builder.append(", Quantity: ");
+		builder.append(getQuantity());
+		builder.append(", Price: ");
+		builder.append(nf.format(getPrice()));
+		builder.append(", Subtotal: ");
+		builder.append(nf.format(getSubTotal()));
+		builder.append("\n");
+		return builder.toString();
 	}
 }

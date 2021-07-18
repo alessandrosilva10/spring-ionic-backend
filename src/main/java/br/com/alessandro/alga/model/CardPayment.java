@@ -2,7 +2,10 @@ package br.com.alessandro.alga.model;
 
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 @Entity
+@JsonTypeName("cardPayment")
 public class CardPayment extends Payment{
 	/**
 	 * 

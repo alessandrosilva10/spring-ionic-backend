@@ -3,6 +3,7 @@ package br.com.alessandro.alga.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -29,6 +30,14 @@ public class ProductService {
 	
 	public List<Product> getAllProducts() {
 		return productRepository.findAll();
+	}
+	
+	public Product findProductById(Long id) {
+		Product productSaved = productRepository.findById(id).orElse(null);
+		if(productSaved == null) {
+			throw new EmptyResultDataAccessException(1);
+		}
+		return productSaved;
 	}
 
 	public Product getOneProduct(Long id) {

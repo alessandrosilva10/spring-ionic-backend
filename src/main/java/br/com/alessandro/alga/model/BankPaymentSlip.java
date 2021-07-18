@@ -4,7 +4,10 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 @Entity
+@JsonTypeName("bankPaymentSlip")
 public class BankPaymentSlip extends Payment {
 	/**
 	 * 
